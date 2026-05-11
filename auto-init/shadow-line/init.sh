@@ -6,13 +6,13 @@ export APT_LISTCHANGES_FRONTEND=none
 #   专业级一键部署脚本 shadow-auto.sh
 #############################################
 
-DOWNLOAD_URL="https://raw.githubusercontent.com/NetVN/ShellBox/refs/heads/main/ss_package.zip"
-TMP_ZIP="/tmp/ss_package.zip"
-TARGET_DIR="/root/ss"
-DNS_SCRIPT="/root/ss/dns.py"
-OUTLINE_SCRIPT="/root/ss/install_server.sh"
-API_CONF="/root/ss/api.conf"
-LOG_FILE="/var/log/ss.log"
+DOWNLOAD_URL="https://raw.githubusercontent.com/BumBee-dev/shell-box/refs/heads/main/auto-init/shadow-line/init_package.zip"
+TMP_ZIP="/tmp/init_package.zip"
+TARGET_DIR="/root/showLine"
+DNS_SCRIPT="/root/showLine/dns.py"
+OUTLINE_SCRIPT="/root/showLine/install_server.sh"
+API_CONF="/root/showLine/api.conf"
+LOG_FILE="/var/log/showLine.log"
 
 GREEN="\033[32m"
 YELLOW="\033[33m"
@@ -57,7 +57,7 @@ parse_outline_output() {
 
 # 参数检查
 if [ -z "$1" ] || [ -z "$2" ]; then
-    error "用法：./shadow-auto.sh <zip密码> <编号>"
+    error "用法：./init.sh <zip密码> <编号>"
 fi
 
 ZIP_PASS="$1"
@@ -152,16 +152,16 @@ RAW_OUT=$("$OUTLINE_SCRIPT" \
     --api-port 54320 \
     --keys-port "$KEYS_PORT")
 
-log "install_server.sh 原始输出：$RAW_OUT"
+log "init.sh 原始输出：$RAW_OUT"
 
 #############################################
-# 解析 install_server.sh 输出
+# 解析 init.sh 输出
 #############################################
 OUT_JSON=$(parse_outline_output "$RAW_OUT")
 
 # fallback
 if [ $? -ne 0 ] || [ -z "$OUT_JSON" ]; then
-    warn "install_server.sh 输出无法解析，尝试读取 /opt/outline/access.txt ..."
+    warn "init.sh 输出无法解析，尝试读取 /opt/outline/access.txt ..."
 
     if [ -f /opt/outline/access.txt ]; then
         ACCESS_RAW=$(cat /opt/outline/access.txt)
@@ -173,7 +173,7 @@ if [ $? -ne 0 ] || [ -z "$OUT_JSON" ]; then
 
         success "已从 access.txt 成功解析 Outline API 信息"
     else
-        error "install_server.sh 输出为空，且 access.txt 不存在，无法继续"
+        error "init.sh 输出为空，且 access.txt 不存在，无法继续"
     fi
 fi
 
